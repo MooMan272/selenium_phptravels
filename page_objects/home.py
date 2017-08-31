@@ -16,7 +16,14 @@ class HomePageObject(BasePage):
         super().__init__()
         self.url = 'http://www.phptravels.net/'
         self.locator = {}
+        self.locator['featured_offer'] = (By.CSS_SELECTOR, 'div.featured')
         return
+
+    def find_featured_offer_elements(self):
+        '''
+        Returns list of WebElements of each Featured Offer.
+        '''
+        return self.driver.find_elements(*self.locator['featured_offer'])
 
     def is_loaded(self):
         '''
