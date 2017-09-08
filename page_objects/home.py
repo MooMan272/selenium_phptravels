@@ -19,6 +19,7 @@ class HomePageObject(BasePage):
         self.url = 'http://www.phptravels.net/'
         self.locator = {}
         self.locator['featured_offer'] = (By.CSS_SELECTOR, 'div.featured')
+        self.locator['go_to_top'] = (By.CSS_SELECTOR, 'a.gotop')
         return
 
     def find_featured_offer_elements(self):
@@ -33,6 +34,18 @@ class HomePageObject(BasePage):
         '''
         nav_bar = NavBar()
         return nav_bar.is_loaded()
+
+    def scroll_to_bottom(self):
+        '''
+        Scrolls to the bottom of the page.
+
+        More specifically, scrolls to show the 'gotop' element. This scroll
+        is instantaneous, so nothing in the middle of the page will 'load,'
+        if it is something that loads dynamically.
+        '''
+        go_to_top = self.driver.find_element(*self.locator['go_to_top'])
+        go_to_top.location_once_scrolled_into_view
+        return
 
 class BaseFeatured(BaseElement, metaclass=abc.ABCMeta):
     '''
