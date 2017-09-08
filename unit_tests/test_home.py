@@ -9,7 +9,7 @@ import pytest
 from selenium import webdriver
 
 import page_objects.base
-from page_objects.home import HomePageObject, FeaturedOffer
+from page_objects.home import HomePageObject, FeaturedCarHotelTour, FeaturedOffer
 import utils.logging_config
 logging.config.dictConfig(utils.logging_config.config)
 
@@ -46,6 +46,53 @@ class TestHomePage:
         assert len(featured_elements) > 0, "Empty list; can't verify items."
         for element in featured_elements:
             assert isinstance(element, webdriver.remote.webelement.WebElement)
+
+class TestFeaturedCarHotelTour:
+    '''
+    Tests for FeaturedCarHotelTour.
+    '''
+
+    @pytest.fixture(scope='class')
+    def featured_car_hotel_tour(self):
+        '''
+        Setup fixture which returns a list of FeaturedCarHotelTour objects.
+        '''
+        home_page = HomePageObject()
+        home_page.scroll_to_bottom()
+        time.sleep(0.5)
+        featured_elements = home_page.find_featured_car_hotel_tour_elements()
+        # Convert to list of FeaturedCarHotelTour objects
+        featured_car_hotel_tour_objects = []
+        for i in featured_elements:
+            featured_car_hotel_tour_objects.append(FeaturedCarHotelTour(i))
+        return featured_car_hotel_tour_objects
+
+    def test_location(self, load_homepage, featured_car_hotel_tour):
+        '''
+        Verifies location string.
+        '''
+        for featured_cht in featured_car_hotel_tour:
+            location = featured_cht.location
+            logging.debug("Location: '{}'.".format(location))
+            assert location != ''
+
+    def test_price(self, load_homepage, featured_car_hotel_tour):
+        '''
+        Verifies price string.
+        '''
+        for featured_cht in featured_car_hotel_tour:
+            price = featured_cht.price
+            logging.debug("Price: '{}'.".format(price))
+            assert price.startswith('USD $')
+
+    def test_title(self, load_homepage, featured_car_hotel_tour):
+        '''
+        Verifies title string.
+        '''
+        for featured_cht in featured_car_hotel_tour:
+            title = featured_cht.title
+            logging.debug("'Title: '{}'.".format(title))
+            assert title != ''
 
 class TestFeaturedOffer:
     '''
