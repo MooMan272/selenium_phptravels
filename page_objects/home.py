@@ -105,3 +105,35 @@ class FeaturedOffer(BaseFeatured):
         Returns title.
         '''
         return self.element.find_element(*self.locator['title']).text
+
+class FeaturedCarHotelTour(BaseFeatured):
+    '''
+    Represents a Featured Car, Hotel, or Tour.
+    '''
+
+    def __init__(self, element):
+        '''
+        Initialize self.
+
+        Paramters
+        ---------
+        element : WebElement
+            Element which this object represents.
+        '''
+        super().__init__(element)
+        self.locator['title'] = (By.CSS_SELECTOR, 'div.featured-title > div > div.strong')
+        self.locator['location'] = (By.CSS_SELECTOR, 'div.featured-title > div > div:nth-child(7)')
+
+    @property
+    def location(self):
+        '''
+        Returns location.
+        '''
+        return self.element.find_element(*self.locator['location']).text
+
+    @property
+    def title(self):
+        '''
+        Returns title.
+        '''
+        return self.element.find_element(*self.locator['title']).text
