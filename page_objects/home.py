@@ -18,9 +18,16 @@ class HomePageObject(BasePage):
         super().__init__()
         self.url = 'http://www.phptravels.net/'
         self.locator = {}
-        self.locator['featured_offer'] = (By.CSS_SELECTOR, 'div.featured')
+        self.locator['featured_car_hotel_tour'] = (By.CSS_SELECTOR, 'div.bgwhite > div.container > div:nth-child(3) > div > a > div.featured')
+        self.locator['featured_offer'] = (By.CSS_SELECTOR, 'div.offersbg > div.container > div > a > div.featured')
         self.locator['go_to_top'] = (By.CSS_SELECTOR, 'a.gotop')
         return
+
+    def find_featured_car_hotel_tour_elements(self):
+        '''
+        Returns list of WebElements of each Featured Car/Hotel/Tour.
+        '''
+        return self.driver.find_elements(*self.locator['featured_car_hotel_tour'])
 
     def find_featured_offer_elements(self):
         '''

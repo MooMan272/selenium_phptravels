@@ -53,29 +53,34 @@ class TestFeaturedOffer:
     '''
 
     @pytest.fixture(scope='class')
-    def featured_offer(self):
+    def featured_offers(self):
         '''
-        Setup fixture which returns a FeaturedOffer object.
+        Setup fixture which returns a list of FeaturedOffer objects.
         '''
         home_page = HomePageObject()
         home_page.scroll_to_bottom()
         time.sleep(0.5)
-        featured_elements = home_page.find_featured_offer_elements()
-        # The last one is [probably] a Featured Offer.
-        return FeaturedOffer(featured_elements[-1])
+        featured_offer_elements = home_page.find_featured_offer_elements()
+        # Convert featured_offer_elements to list of FeaturedOffer objects
+        featured_offer_objects = []
+        for i in featured_offer_elements:
+            featured_offer_objects.append(FeaturedOffer(i))
+        return featured_offer_objects
 
-    def test_price(self, featured_offer):
+    def test_price(self, load_homepage, featured_offers):
         '''
         Verifies price string.
         '''
-        price = featured_offer.price
-        logging.debug("Price: '{}'.".format(price))
-        assert price.startswith('USD $')
+        for featured_offer in featured_offers:
+            price = featured_offer.price
+            logging.debug("Price: '{}'.".format(price))
+            assert price.startswith('USD $')
 
-    def test_title(self, featured_offer):
+    def test_title(self, load_homepage, featured_offers):
         '''
         Verifies title string.
         '''
-        title = featured_offer.title
-        logging.debug("'Title: '{}'.".format(title))
-        assert title != ''
+        for featured_offer in featured_offers:
+            title = featured_offer.title
+            logging.debug("'Title: '{}'.".format(title))
+            assert title != ''
