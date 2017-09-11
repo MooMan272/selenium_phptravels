@@ -6,7 +6,7 @@ import abc
 
 from selenium.webdriver.common.by import By
 
-from page_objects.base import BasePage, BaseElement
+from page_objects.base import BasePage, LoadingElement
 from page_objects.common import NavBar
 
 class HomePageObject(BasePage):
@@ -54,7 +54,7 @@ class HomePageObject(BasePage):
         go_to_top.location_once_scrolled_into_view
         return
 
-class BaseFeatured(BaseElement, metaclass=abc.ABCMeta):
+class BaseFeatured(LoadingElement, metaclass=abc.ABCMeta):
     '''
     Abstract class representing a Featured Hotel, Tour, Car, or Offer.
     '''
@@ -72,7 +72,16 @@ class BaseFeatured(BaseElement, metaclass=abc.ABCMeta):
         self.element = element
         # These are relative to self.element
         self.locator = {}
+        self.locator['loading'] = (By.CSS_SELECTOR, 'div.load > img.img-responsive')
         self.locator['price'] = (By.CSS_SELECTOR, 'div.featured-price')
+
+    def is_loaded(self):
+        '''
+        True if img src is not loading.svg.
+        '''
+        src_img = self.element.find_element(*self.locator['loading']).get_attribute('src')
+        if src_img.endswith('loading.svg'): return False
+        return True
 
     @property
     def price(self):
