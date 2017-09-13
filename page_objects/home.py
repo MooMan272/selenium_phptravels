@@ -139,6 +139,7 @@ class FeaturedCarHotelTour(BaseFeatured):
         super().__init__(element)
         self.locator['title'] = (By.CSS_SELECTOR, 'div.featured-title > div > div.strong')
         self.locator['location'] = (By.CSS_SELECTOR, 'div.featured-title > div > div:nth-child(7)')
+        self.locator['star_voted'] = (By.CSS_SELECTOR, 'i.star.voted')
 
     @property
     def location(self):
@@ -146,6 +147,13 @@ class FeaturedCarHotelTour(BaseFeatured):
         Returns location.
         '''
         return self.element.find_element(*self.locator['location']).text
+
+    @property
+    def stars(self):
+        '''
+        Returns number of stars rated.
+        '''
+        return len(self.element.find_elements(*self.locator['star_voted']))
 
     @property
     def title(self):
